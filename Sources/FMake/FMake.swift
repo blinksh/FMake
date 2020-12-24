@@ -126,15 +126,15 @@ public enum Platform: String, CaseIterable {
   case MacOSX, Catalyst
   case WatchOS, WatchSimulator
   
-  var name: String {
+  public var name: String {
     rawValue
   }
   
-  var sdk: String {
+  public var sdk: String {
     self == .Catalyst ? Platform.MacOSX.rawValue.lowercased() : rawValue.lowercased()
   }
   
-  var archs: [Arch] {
+  public var archs: [Arch] {
     switch self {
     case .AppleTVOS:        return [.arm64]
     case .AppleTVSimulator: return [.x86_64 /*, .arm64 */]
@@ -160,23 +160,23 @@ public enum Platform: String, CaseIterable {
     "xcrun --sdk \(sdk)"
   }
   
-  func sdkPath() throws -> String {
+  public func sdkPath() throws -> String {
     return try readLine(cmd:  "\(_xcrunSdk) --show-sdk-path")
   }
   
-  func sdkVersion() throws -> String {
+  public func sdkVersion() throws -> String {
     return try readLine(cmd: "\(_xcrunSdk) --show-sdk-version")
   }
   
-  func ccPath() throws -> String {
+  public func ccPath() throws -> String {
     return try readLine(cmd: "\(_xcrunSdk) -f cc")
   }
   
-  func cxxPath() throws -> String {
+  public func cxxPath() throws -> String {
     return try readLine(cmd: "\(_xcrunSdk) -f c++")
   }
   
-  var minSDKVersionName: String {
+  public var minSDKVersionName: String {
     switch self {
     case .AppleTVOS:        return "tvos_version_min"
     case .AppleTVSimulator: return "tvos_simulator_version_min"
@@ -211,7 +211,7 @@ public enum Platform: String, CaseIterable {
     }
   }
   
-  func module(name: String, headers: ModuleHeader) -> String {
+  public func module(name: String, headers: ModuleHeader) -> String {
     """
     module \(name) {
       \(headers.moduleCode())
@@ -221,7 +221,7 @@ public enum Platform: String, CaseIterable {
     """
   }
   
-  func plist(name: String, version: String, id: String, minSdkVersion: String) throws -> String {
+  public func plist(name: String, version: String, id: String, minSdkVersion: String) throws -> String {
     """
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
