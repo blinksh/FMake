@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Building release assets
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: xcode-select
+      run: sudo xcode-select -s /Applications/Xcode_12.3.app
+
+    - name: test
+      run: swift test
