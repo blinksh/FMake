@@ -51,3 +51,24 @@ public func readLine(cmd: String) throws -> String {
 public func md5(path: String) throws -> String {
   try readLine(cmd: "md5 -q \(path)")
 }
+
+public enum SHAAlgorithm: Int {
+  case _1 = 1
+  case _224 = 224
+  case _256 = 256
+  case _384 = 384
+  case _512 = 512
+  case _512224 = 512224
+  case _512256 = 512256
+}
+
+public func sha(path: String, algorithm: SHAAlgorithm = ._256) throws -> String {
+  guard
+    let checksum = try readLine(cmd: "shasum -a \(algorithm.rawValue) \(path)").split(separator: " ").first
+  else {
+     throw BuildError.unexpectedOutput
+  }
+
+  return String(checksum)
+  
+}

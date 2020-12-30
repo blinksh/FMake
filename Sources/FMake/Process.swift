@@ -30,6 +30,7 @@ fileprivate func _installSigintIfNeeded() {
 
 public enum BuildError: Error {
   case unexpectedStatusCode
+  case unexpectedOutput
 }
 
 extension String {
