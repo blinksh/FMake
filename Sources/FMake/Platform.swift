@@ -23,7 +23,7 @@ public enum Platform: String, CaseIterable {
   }
   
   public enum Arch: String {
-    case x86_64, arm64, arm64e, armv7, armv7k, arm64_32
+    case x86_64, arm64, arm64e, armv7k, arm64_32
   }
   
   case AppleTVOS, AppleTVSimulator
@@ -43,7 +43,7 @@ public enum Platform: String, CaseIterable {
     switch self {
     case .AppleTVOS:        return [.arm64]
     case .AppleTVSimulator: return [.x86_64 /*, .arm64 */]
-    case .iPhoneOS:         return [.armv7, .arm64, .arm64e]
+    case .iPhoneOS:         return [.arm64, .arm64e]
     case .iPhoneSimulator:  return [.x86_64, .arm64]
     case .WatchOS:          return [.arm64_32]
     case .WatchSimulator:   return [.x86_64]
