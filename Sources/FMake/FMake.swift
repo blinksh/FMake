@@ -12,7 +12,6 @@ public func cwd() -> String {
   FileManager.default.currentDirectoryPath
 }
 
-
 public func cd(_ path: String) {
   FileManager.default.changeCurrentDirectoryPath(path)
 }
@@ -70,5 +69,4 @@ public func sha(path: String, algorithm: SHAAlgorithm = ._256) throws -> String 
   }
 
   return String(checksum)
-  
 }
