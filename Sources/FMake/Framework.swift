@@ -4,6 +4,7 @@ public func xbArchive(
   archivePath: String? = nil,
   project: String = "",
   scheme: String = "",
+  framework: String = "",
   platform: Platform = .iPhoneOS,
   buildForDistribution: Bool = true,
   enableBitCode: Bool = true,
@@ -12,7 +13,8 @@ public func xbArchive(
   env: [String: String]? = nil
 ) throws {
   
-  let path = archivePath ?? "\(scheme).xcarchive"
+  let frameworkName = framework.isEmpty ? scheme : framework
+  let path = archivePath ?? "\(frameworkName).xcarchive"
   
   var projectArg = ""
   if !project.isEmpty {
@@ -43,6 +45,7 @@ public func xbArchive(
   dirPath: String,
   project: String = "",
   scheme: String = "",
+  framework: String = "",
   platforms: [(Platform, excludedArchs: [Platform.Arch])],
   buildForDistribution: Bool = true,
   enableBitCode: Bool = true,
@@ -55,6 +58,7 @@ public func xbArchive(
       archivePath: path,
       project: project,
       scheme: scheme,
+      framework: framework,
       platform: p.0,
       buildForDistribution: buildForDistribution,
       enableBitCode: enableBitCode,
@@ -68,17 +72,21 @@ public func xbArchive(
 public func xcxcf(dirPath: String,
                   project: String = "",
                   scheme: String = "",
+                  framework: String = "",
                   platforms: [(Platform, excludedArchs: [Platform.Arch])],
                   enableBitCode: Bool = true,
                   includeDSYMs: Bool = true
 ) throws {
   
   let dir = URL(fileURLWithPath: dirPath).path
+
+  let frameworkName = framework.isEmpty ? scheme : framework
   
   try xbArchive(
     dirPath: dirPath,
     project: project,
     scheme: scheme,
+    framework: framework,
     platforms: platforms,
     enableBitCode: enableBitCode
   )
@@ -87,8 +95,8 @@ public func xcxcf(dirPath: String,
   
   for p in platforms {
     let xcarchive = "\(dir)/\(scheme)-\(p.0.sdk).xcarchive"
-    let framework = "\(xcarchive)/Products/Library/Frameworks/\(scheme).framework"
-    let dsym = "\(xcarchive)/dSYMs/\(scheme).framework.dSYM"
+    let framework = "\(xcarchive)/Products/Library/Frameworks/\(frameworkName).framework"
+    let dsym = "\(xcarchive)/dSYMs/\(frameworkName).framework.dSYM"
     
     args += " -framework \(framework)"
     if includeDSYMs {
@@ -96,7 +104,7 @@ public func xcxcf(dirPath: String,
     }
   }
   
-  args += " -output \(dirPath)/\(scheme).xcframework"
-  try sh("rm -rf \(dirPath)/\(scheme).xcframework")
+  args += " -output \(dirPath)/\(frameworkName).xcframework"
+  try sh("rm -rf \(dirPath)/\(frameworkName).xcframework")
   try sh("xcodebuild -create-xcframework", args)
 }

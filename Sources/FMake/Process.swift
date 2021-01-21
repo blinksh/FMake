@@ -148,9 +148,12 @@ public func sh(
   else {
     
     if outputLevel != .none {
-      print("----------------------------------------")
       print("Unexpected exit code \(p.terminationStatus)")
-      print("`\(cmd)`")
+      print("----------------------------------------")
+      for (name, value) in p.environment ?? [:] {
+        print("\(name)=\"\(value)\" \\")
+      }
+      print("\(cmd)")
       print("----------------------------------------")
       
       chunks.forEach(FileHandle.standardOutput.write)
