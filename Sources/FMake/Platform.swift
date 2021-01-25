@@ -81,7 +81,7 @@ public enum Platform: String, CaseIterable {
     return try readLine(cmd: "\(_xcrunSdk) -f c++")
   }
   
-  public var minSDKVersionName: String {
+  public var plistMinSDKVersionName: String {
     switch self {
     case .AppleTVOS:        return "tvos_version_min"
     case .AppleTVSimulator: return "tvos_simulator_version_min"
@@ -92,6 +92,59 @@ public enum Platform: String, CaseIterable {
     case .WatchOS:          return "watchos_version_min"
     case .WatchSimulator:   return "watchos_simulator_version_min"
     }
+  }
+
+  public func ccMinVersionFlag(_ version: String?) -> String {
+    if let version = version {
+      return "-m\(sdk)-version-min=\(version)"
+    }
+    return ""
+  }
+  
+  public func ccTarget(arch: Arch) -> String {
+    switch self {
+    case .Catalyst: return "-target \(arch)-apple-ios14.0-macabi"
+    default: return ""
+    }
+  }
+  
+  public func ccSysRoot() -> String {
+    if let path = try? sdkPath() {
+      return "-isysroot \(path)"
+    }
+    return ""
+  }
+  
+  public func ldSysLibRoot() -> String {
+    if let path = try? sdkPath() {
+      return "-syslibroot \(path)"
+    }
+    return ""
+  }
+
+  public func ccFlags(release: Bool = true, arch: Arch, minVersion: String? = nil, bitcode: Bool = true, noCommon: Bool = false, sysroot: Bool = true) -> String {
+    [
+      release ? "-O3" : "-g -O0",
+      bitcode ? "-fembed-bitcode" : "",
+      ccTarget(arch: arch),
+      "-arch \(arch)",
+      sysroot ? ccSysRoot() : "",
+      ccMinVersionFlag(minVersion),
+      noCommon ? "-fno-common" : ""
+    ]
+    .filter({!$0.isEmpty})
+    .joined(separator: " ")
+  }
+  
+  public func ldFlags(arch: Arch, minVersion: String? = nil, bitcode: Bool = true, syslibroot: Bool = true) -> String {
+    [
+      // "-arch \(arch)",
+      // bitcode ? "-bitcode_bundle" : "",
+      // minVersion != nil ? "-\(plistMinSDKVersionName) \(minVersion!)" : "",
+      // syslibroot ? ldSysLibRoot() : ""
+    ]
+    .filter({!$0.isEmpty})
+    .joined(separator: " ")
   }
   
   enum DeviceType: Int {
@@ -149,7 +202,7 @@ public enum Platform: String, CaseIterable {
       <key>CFBundleVersion</key>
       <string>1</string>
       <key>MinimumOSVersion</key>
-      <string>\(minSdkVersion)</string>
+      <string>\(plistMinSDKVersionName)</string>
       <key>CFBundleSupportedPlatforms</key>
       <array>
         <string>\(rawValue)</string>
