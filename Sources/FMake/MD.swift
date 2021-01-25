@@ -52,8 +52,7 @@ extension MD {
   
   static func table(headers: [String?], aligns: [Align] = [], rows: [[String?]]) -> String {
     var lengths = Array<Int>(repeating: 0, count: headers.count)
-    let headersCount = headers.count
-    for i in 0..<headersCount {
+    for i in 0..<headers.count {
       var len = headers[i].tableValue.utf8.count
       for row in rows {
         if i >= row.count {
@@ -64,9 +63,12 @@ extension MD {
       }
       lengths[i] = len
     }
+
+    var result = ""
     
-    var result = "|"
-    // Header
+    // header
+    result += "|"
+    
     for (i, h) in headers.enumerated() {
       let len = lengths[i]
       let padded = h.tableValue.padding(toLength: len, withPad: " ", startingAt: 0)
@@ -98,8 +100,6 @@ extension MD {
     result += "\n"
     
     // values
-    
-    
     for row in rows {
       result += "|"
       for (i, v) in row.enumerated() {
@@ -118,14 +118,3 @@ extension MD {
     return result
   }
 }
-
-/*
-| Header 1 | Header 2 |
-| -------- | -------- |
-| 1        | 2        |
-
-| Header 1 | Header 2 |
-| -------- | -------- |
-| 1        | 2        |
- */
-
