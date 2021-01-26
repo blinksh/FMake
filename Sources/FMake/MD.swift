@@ -13,23 +13,23 @@ public enum MD {
 
 extension MD {
   
-  static func header(_ text: String, level: HeaderLevel = .h1) -> String {
+  public static func header(_ text: String, level: HeaderLevel = .h1) -> String {
     "\(level.rawValue) \(text)\n"
   }
   
-  static func h1(_ text: String) -> String {
+  public static func h1(_ text: String) -> String {
     header(text, level: .h1)
   }
   
-  static func h2(_ text: String) -> String {
+  public static func h2(_ text: String) -> String {
     header(text, level: .h2)
   }
   
-  static func h3(_ text: String) -> String {
+  public static func h3(_ text: String) -> String {
     header(text, level: .h3)
   }
   
-  static func h4(_ text: String) -> String {
+  public static func h4(_ text: String) -> String {
     header(text, level: .h4)
   }
   
@@ -46,11 +46,11 @@ fileprivate extension Optional where Wrapped == String {
 
 extension MD {
   
-  static func table(_ headers: String?..., aligns: [Align] = [], rows: [[String?]]) -> String {
+  public static func table(_ headers: String?..., aligns: [Align] = [], rows: [[String?]]) -> String {
     table(headers: headers, aligns: aligns, rows: rows)
   }
   
-  static func table(headers: [String?], aligns: [Align] = [], rows: [[String?]]) -> String {
+  public static func table(headers: [String?], aligns: [Align] = [], rows: [[String?]]) -> String {
     var lengths = Array<Int>(repeating: 0, count: headers.count)
     for i in 0..<headers.count {
       var len = headers[i].tableValue.utf8.count
