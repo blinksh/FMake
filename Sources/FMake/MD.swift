@@ -115,6 +115,15 @@ extension MD {
       result += "\n"
     }
     
+    result += "\n"
+    
     return result
+  }
+}
+
+
+public extension Array where Element == [String?] {
+  func markdown(headers: String..., aligns: [MD.Align] = []) -> String {
+    MD.table(headers: headers, aligns: aligns, rows: self)
   }
 }
