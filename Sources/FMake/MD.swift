@@ -61,7 +61,7 @@ extension MD {
         
         len = max(len, row[i].tableValue.utf8.count)
       }
-      lengths[i] = len
+      lengths[i] = max(len, 3)
     }
 
     var result = ""
@@ -122,8 +122,14 @@ extension MD {
 }
 
 
-public extension Array where Element == [String?] {
+public extension Array where Element == [String] {
   func markdown(headers: String..., aligns: [MD.Align] = []) -> String {
     MD.table(headers: headers, aligns: aligns, rows: self)
+  }
+}
+
+public extension Array where Element == [String?] {
+  func markdown(headers: String..., aligns: [MD.Align] = []) -> String {
+    return MD.table(headers: headers, aligns: aligns, rows: self)
   }
 }

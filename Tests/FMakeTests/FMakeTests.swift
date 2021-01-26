@@ -60,5 +60,16 @@ final class FMakeTests: XCTestCase {
 
 
       """)
+
+    XCTAssertEqual(
+      [["1", "2"], ["3", "4"]].markdown(headers: "A", "B"),
+      """
+      | A   | B   |
+      | --- | --- |
+      | 1   | 2   |
+      | 3   | 4   |
+
+
+      """)
   }
 }
