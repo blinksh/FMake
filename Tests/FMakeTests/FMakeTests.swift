@@ -25,6 +25,7 @@ final class FMakeTests: XCTestCase {
       | -------- | -------- |
       | 1        | 2        |
 
+
       """)
     
     XCTAssertEqual(
@@ -41,6 +42,7 @@ final class FMakeTests: XCTestCase {
       | ---      |                                 |
       | 1 \\| 2   | Very long value with some value |
 
+
       """)
     
     XCTAssertEqual(
@@ -55,6 +57,7 @@ final class FMakeTests: XCTestCase {
       | Header 1 | Header 2 | Header 3 |
       | -------- | :------: | -------: |
       | 1        | 2        | 3        |
+
 
       """)
   }
