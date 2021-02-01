@@ -37,6 +37,7 @@ public func xbArchive(
     "BUILD_FOR_DISTRIBUTION=\(buildForDistribution ? "YES" : "NO")",
     "SKIP_INSTALL=\(skipInstall ? "YES" : "NO")",
     "ENABLE_BITCODE=\(enableBitCode ? "YES" : "NO")",
+    platform == .Catalyst ? "SUPPORTS_MACCATALYST=YES" : "",
     env: env
   )
 }
@@ -53,7 +54,7 @@ public func xbArchive(
   env: [String: String]? = nil
 ) throws {
   for p in platforms {
-    let path = "\(dirPath)/\(scheme)-\(p.0.sdk).xcarchive"
+    let path = "\(dirPath)/\(scheme)-\(p.0).xcarchive"
     try xbArchive(
       archivePath: path,
       project: project,
@@ -94,7 +95,7 @@ public func xcxcf(dirPath: String,
   var args = ""
   
   for p in platforms {
-    let xcarchive = "\(dir)/\(scheme)-\(p.0.sdk).xcarchive"
+    let xcarchive = "\(dir)/\(scheme)-\(p.0).xcarchive"
     let framework = "\(xcarchive)/Products/Library/Frameworks/\(frameworkName).framework"
     let dsym = "\(xcarchive)/dSYMs/\(frameworkName).framework.dSYM"
     
