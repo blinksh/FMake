@@ -34,6 +34,7 @@ public func xbArchive(
     "-sdk", platform.sdk,
     "-archivePath", path,
     excludedArchsArg,
+    platform == .Catalyst ? "-destination 'platform=macOS,variant=Mac Catalyst'" : "",
     "BUILD_FOR_DISTRIBUTION=\(buildForDistribution ? "YES" : "NO")",
     "SKIP_INSTALL=\(skipInstall ? "YES" : "NO")",
     "ENABLE_BITCODE=\(enableBitCode ? "YES" : "NO")",
