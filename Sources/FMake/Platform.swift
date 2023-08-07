@@ -30,13 +30,19 @@ public enum Platform: String, CaseIterable {
   case iPhoneOS, iPhoneSimulator
   case MacOSX, Catalyst
   case WatchOS, WatchSimulator
+  case visionOS = "XROS", visionSimulator = "XRSimulator"
   
   public var name: String {
     rawValue
   }
   
   public var sdk: String {
-    self == .Catalyst ? Platform.MacOSX.rawValue.lowercased() : rawValue.lowercased()
+    switch self {
+    case .Catalyst:
+      return Platform.MacOSX.rawValue.lowercased()
+    default:
+      return rawValue.lowercased()
+    }
   }
   
   public var archs: [Arch] {
@@ -49,6 +55,8 @@ public enum Platform: String, CaseIterable {
     case .WatchSimulator:   return [.x86_64]
     case .MacOSX:           return [.x86_64, .arm64]
     case .Catalyst:         return [.x86_64, .arm64]
+    case .visionOS:         return [.arm64]
+    case .visionSimulator:  return [.arm64, .x86_64]
     }
   }
   
@@ -58,6 +66,7 @@ public enum Platform: String, CaseIterable {
     case .MacOSX, .Catalyst:            return "Darwin"
     case .iPhoneOS, .iPhoneSimulator:   return "iOS"
     case .WatchOS, .WatchSimulator:     return "watchOS"
+    case .visionOS, .visionSimulator:   return "XROS"
     }
   }
   
@@ -83,14 +92,15 @@ public enum Platform: String, CaseIterable {
   
   public var plistMinSDKVersionName: String {
     switch self {
-    case .AppleTVOS:        return "tvos_version_min"
-    case .AppleTVSimulator: return "tvos_simulator_version_min"
-    case .MacOSX:           return "macosx_version_min"
-    case .Catalyst:         return "platform_version mac-catalyst 14.0"
-    case .iPhoneOS:         return "ios_version_min"
-    case .iPhoneSimulator:  return "ios_simulator_version_min"
-    case .WatchOS:          return "watchos_version_min"
-    case .WatchSimulator:   return "watchos_simulator_version_min"
+    case .AppleTVOS:                  return "tvos_version_min"
+    case .AppleTVSimulator:           return "tvos_simulator_version_min"
+    case .MacOSX:                     return "macosx_version_min"
+    case .Catalyst:                   return "platform_version mac-catalyst 14.0"
+    case .iPhoneOS:                   return "ios_version_min"
+    case .iPhoneSimulator:            return "ios_simulator_version_min"
+    case .WatchOS:                    return "watchos_version_min"
+    case .WatchSimulator:             return "watchos_simulator_version_min"
+    case .visionOS, .visionSimulator: return "1.0"
     }
   }
 
@@ -154,6 +164,7 @@ public enum Platform: String, CaseIterable {
     case watch = 4
     case tv4k = 5
     case mac = 6
+    case vision = 7
   }
   
   var deviceFamily: [DeviceType] {
@@ -166,6 +177,8 @@ public enum Platform: String, CaseIterable {
       return [.iphone, .ipad]
     case .WatchOS, .WatchSimulator:
       return [.watch]
+    case .visionOS, .visionSimulator:
+      return [.vision]
     }
   }
   
