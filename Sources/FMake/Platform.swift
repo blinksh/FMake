@@ -122,7 +122,7 @@ public enum Platform: String, CaseIterable {
     return ""
   }
 
-  public func ccFlags(release: Bool = true, arch: Arch, minVersion: String? = nil, bitcode: Bool = true, noCommon: Bool = false, sysroot: Bool = true) -> String {
+  public func ccFlags(release: Bool = true, arch: Arch, minVersion: String? = nil, bitcode: Bool = false, noCommon: Bool = false, sysroot: Bool = true) -> String {
     [
       release ? "-O3" : "-g -O0",
       bitcode ? "-fembed-bitcode" : "",
@@ -136,7 +136,7 @@ public enum Platform: String, CaseIterable {
     .joined(separator: " ")
   }
   
-  public func ldFlags(arch: Arch, minVersion: String? = nil, bitcode: Bool = true, syslibroot: Bool = true) -> String {
+  public func ldFlags(arch: Arch, minVersion: String? = nil, bitcode: Bool = false, syslibroot: Bool = true) -> String {
     [
       // "-arch \(arch)",
       // bitcode ? "-bitcode_bundle" : "",
@@ -255,10 +255,6 @@ public func appleCMake() -> String {
 
     list(APPEND CMAKE_FIND_ROOT_PATH $ENV{SECOND_FIND_ROOT_PATH})
     set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
-
-    set(BITCODE "-fembed-bitcode")
-    set(CMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE "bitcode")
-    set(CMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE "YES")
 
     if (NOT $ENV{APPLE_PLATFORM} MATCHES "macosx")
         set(UNIX True)

@@ -7,7 +7,7 @@ public func xbArchive(
   framework: String = "",
   platform: Platform = .iPhoneOS,
   buildForDistribution: Bool = true,
-  enableBitCode: Bool = true,
+  enableBitCode: Bool = false,
   excludedArchs: [Platform.Arch] = [],
   skipInstall: Bool = false,
   env: [String: String]? = nil
